@@ -37,3 +37,10 @@ jwt:
   secret: ${JWT_SECRET:local-placeholder}
   access-token-validity-in-milliseconds: ${ACCESS_TOKEN_VALIDITY_IN_MILLISECONDS:3600000}
   refresh-token-validity-in-milliseconds: ${REFRESH_TOKEN_VALIDITY_IN_MILLISECONDS:86400000}
+
+youtube:
+  api-key: ${YOUTUBE_API_KEY:}
+
+gemini:
+  api-key: ${GEMINI_API_KEY:}
+  model: ${GEMINI_MODEL:gemini-2.5-flash-lite}

@@ -23,7 +23,7 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .status(e.getErrorCode().getHttpStatus())
-                .body(ApiResponse.failure(e.getErrorCode()));
+                .body(ApiResponse.failure(e.getErrorCode(), resolveBusinessMessage(e)));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -88,5 +88,12 @@ public class GlobalExceptionHandler {
         return String.format("%s: %s",
                 fieldError.getField(),
                 fieldError.getDefaultMessage());
+    }
+
+    private String resolveBusinessMessage(BusinessException e) {
+        if (e.getMessage() == null || e.getMessage().equals(e.getErrorCode().getCode())) {
+            return e.getErrorCode().getMessage();
+        }
+        return e.getMessage();
     }
 }

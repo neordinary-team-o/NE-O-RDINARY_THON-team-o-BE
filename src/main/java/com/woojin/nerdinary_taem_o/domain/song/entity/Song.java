@@ -33,6 +33,9 @@ public class Song extends BaseTimeEntity {
 
     private String externalUrl;
 
+    @Column(length = 500)
+    private String thumbnailUrl;
+
     @Enumerated(EnumType.STRING)
     @Column(length = 10)
     private Platform platform;
