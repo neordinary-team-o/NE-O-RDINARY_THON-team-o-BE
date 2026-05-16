@@ -19,7 +19,7 @@ public enum ErrorCode {
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "유저를 찾을 수 없습니다"),
     DUPLICATE_NICKNAME(HttpStatus.CONFLICT, "이미 사용 중인 닉네임입니다"),
 
-    // 곡,발굴
+    // 곡/발굴
     SONG_SEARCH_EMPTY(HttpStatus.NOT_FOUND, "검색된 곡이 없습니다"),
     DUPLICATE_DIG(HttpStatus.CONFLICT, "이미 등록한 곡입니다"),
     EXTERNAL_API_FAILED(HttpStatus.BAD_GATEWAY, "외부 API 호출에 실패했습니다"),
