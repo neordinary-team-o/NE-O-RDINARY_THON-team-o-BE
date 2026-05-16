@@ -1,5 +1,6 @@
 package com.woojin.nerdinary_taem_o.api;
 
+import com.woojin.nerdinary_taem_o.api.docs.AuthControllerDocs;
 import com.woojin.nerdinary_taem_o.common.dto.ApiResponse;
 import com.woojin.nerdinary_taem_o.domain.user.dto.LoginRequest;
 import com.woojin.nerdinary_taem_o.domain.user.dto.LoginResponse;
@@ -17,16 +18,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-public class AuthController {
+public class AuthController implements AuthControllerDocs {
 
     private final UserService userService;
 
+    @Override
     @PostMapping("/signup")
     public ResponseEntity<ApiResponse<SignupResponse>> signup(@RequestBody SignupRequest request) {
         SignupResponse response = userService.signup(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(response));
     }
 
+    @Override
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<LoginResponse>> login(@RequestBody LoginRequest request) {
         LoginResponse response = userService.login(request);

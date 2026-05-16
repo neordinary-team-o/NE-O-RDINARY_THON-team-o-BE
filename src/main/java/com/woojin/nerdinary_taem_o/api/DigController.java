@@ -1,5 +1,6 @@
 package com.woojin.nerdinary_taem_o.api;
 
+import com.woojin.nerdinary_taem_o.api.docs.DigControllerDocs;
 import com.woojin.nerdinary_taem_o.common.dto.ApiResponse;
 import com.woojin.nerdinary_taem_o.domain.dig.dto.DigCreateRequest;
 import com.woojin.nerdinary_taem_o.domain.dig.dto.DigCreateResponse;
@@ -15,10 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/digs")
 @RequiredArgsConstructor
-public class DigController {
+public class DigController implements DigControllerDocs {
 
     private final DigService digService;
 
+    @Override
     @PostMapping
     public ResponseEntity<ApiResponse<DigCreateResponse>> create(@RequestBody DigCreateRequest request) {
         DigCreateResponse response = digService.create(request);
