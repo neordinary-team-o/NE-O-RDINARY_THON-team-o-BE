@@ -2,11 +2,7 @@ package com.woojin.nerdinary_taem_o.domain.song.entity;
 
 import com.woojin.nerdinary_taem_o.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
@@ -25,10 +21,21 @@ public class Song extends BaseTimeEntity {
     @Column(nullable = false)
     private String title;
 
-    private String externalUrl;
-
     @Column(length = 500)
     private String thumbnailUrl;
 
-    private LocalDate uploadDate;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "artist_id", nullable = false)
+    private Artist artist;
+
+    @Column
+    private LocalDate uploadDate;   // YouTube 업로드 날짜 (DIG SCORE 계산용)
+
+    @Column
+    private Long currentViewCount;  // 스케줄러가 주기적으로 업데이트
+
+    // 현재 조회수 업데이트 (스케줄러 전용)
+    public void updateCurrentViewCount(Long viewCount) {
+        this.currentViewCount = viewCount;
+    }
 }
