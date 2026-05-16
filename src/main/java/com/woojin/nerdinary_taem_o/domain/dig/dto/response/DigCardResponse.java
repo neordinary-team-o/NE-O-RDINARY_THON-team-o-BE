@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Builder
-@Getter
 public record DigCardResponse(Long digId,
                               String songTitle,
                               String artistName,
