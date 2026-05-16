@@ -1,6 +1,8 @@
 package com.woojin.nerdinary_taem_o.domain.song.entity;
 
 import com.woojin.nerdinary_taem_o.common.entity.BaseTimeEntity;
+import com.woojin.nerdinary_taem_o.common.exception.ErrorCode;
+import com.woojin.nerdinary_taem_o.common.exception.model.BusinessException;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -34,8 +36,43 @@ public class Song extends BaseTimeEntity {
     @Column
     private Long currentViewCount;  // 스케줄러가 주기적으로 업데이트
 
-    // 현재 조회수 업데이트 (스케줄러 전용)
+    public static Song create(String title, String thumbnailUrl,
+                              Artist artist, LocalDate uploadDate,
+                              Long currentViewCount) {
+        return new Song(title, thumbnailUrl, artist, uploadDate, currentViewCount);
+    }
+
+    private Song(String title, String thumbnailUrl, Artist artist,
+                 LocalDate uploadDate, Long currentViewCount) {
+
+        validate(title, artist, currentViewCount);
+        this.title = title;
+        this.thumbnailUrl = thumbnailUrl;
+        this.artist = artist;
+        this.uploadDate = uploadDate;
+        this.currentViewCount = currentViewCount;
+    }
+
+    private void validate(String title, Artist artist, Long currentViewCount) {
+        if (title == null || title.isBlank()) {
+            throw new BusinessException(ErrorCode.INVALID_INPUT,
+                    "곡 제목은 필수입니다.");
+        }
+        if (artist == null) {
+            throw new BusinessException(ErrorCode.INVALID_INPUT,
+                    "아티스트 정보는 필수입니다.");
+        }
+        if (currentViewCount != null && currentViewCount < 0) {
+            throw new BusinessException(ErrorCode.INVALID_INPUT,
+                    "조회수는 0 이상이어야 합니다.");
+        }
+    }
+
     public void updateCurrentViewCount(Long viewCount) {
+        if (viewCount < 0) {
+            throw new BusinessException(ErrorCode.INVALID_INPUT,
+                    "조회수는 0 이상이어야 합니다.");
+        }
         this.currentViewCount = viewCount;
     }
 }

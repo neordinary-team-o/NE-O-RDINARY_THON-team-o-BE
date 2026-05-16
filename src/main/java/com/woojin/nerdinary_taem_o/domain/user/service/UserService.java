@@ -25,10 +25,7 @@ public class UserService {
             throw new DuplicateResourceException(ErrorCode.DUPLICATE_NICKNAME);
         }
 
-        User user = User.builder()
-                .nickname(request.nickname())
-                .password(request.password())
-                .build();
+        User user = User.create(request.nickname(), request.password());
 
         User saved = userRepository.save(user);
         return new SignupResponse(saved.getId(), saved.getNickname());

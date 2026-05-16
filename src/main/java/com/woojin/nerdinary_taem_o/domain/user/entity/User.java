@@ -1,6 +1,8 @@
 package com.woojin.nerdinary_taem_o.domain.user.entity;
 
 import com.woojin.nerdinary_taem_o.common.entity.BaseTimeEntity;
+import com.woojin.nerdinary_taem_o.common.exception.ErrorCode;
+import com.woojin.nerdinary_taem_o.common.exception.model.BusinessException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -11,9 +13,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "users")
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class User extends BaseTimeEntity {
 
     @Id
@@ -25,4 +25,20 @@ public class User extends BaseTimeEntity {
 
     @Column(nullable = false, length = 4)
     private String password;
+
+    public static User create(String nickname, String password) {
+        return new User(nickname, password);
+    }
+
+    private User(String nickname, String password) {
+        this.nickname = nickname;
+        this.password = password;
+    }
+
+    private void validate(String nickname, String password) {
+        if (nickname.isEmpty() || password.isEmpty()) {
+            throw new BusinessException(ErrorCode.LOGIN_INVALID_INPUT,
+                    ErrorCode.LOGIN_INVALID_INPUT.getMessage());
+        }
+    }
 }
