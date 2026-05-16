@@ -1,0 +1,28 @@
+package com.woojin.nerdinary_taem_o.api;
+
+import com.woojin.nerdinary_taem_o.common.dto.ApiResponse;
+import com.woojin.nerdinary_taem_o.common.dto.PageResponse;
+import com.woojin.nerdinary_taem_o.domain.dig.dto.DigCardDto;
+import com.woojin.nerdinary_taem_o.domain.dig.service.DigSearchService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/digs")
+@RequiredArgsConstructor
+public class DigSearchController {
+
+    private final DigSearchService digService;
+
+    // 홈 화면 - 내 발굴 목록 (6개씩 페이징)
+    @GetMapping("/me")
+    public ResponseEntity<ApiResponse<PageResponse<DigCardDto>>> getMyDigs(
+            @RequestParam Long userId,
+            @RequestParam(defaultValue = "0") int page
+    ) {
+        return ResponseEntity.ok(
+                ApiResponse.success(digService.getMyDigs(userId, page))
+        );
+    }
+}
