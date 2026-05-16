@@ -13,8 +13,15 @@ public interface DigRepository extends JpaRepository<Dig, Long> {
 
     boolean existsByUserIdAndSongId(Long userId, Long songId);
 
-    @Query("SELECT d FROM Dig d JOIN FETCH d.song s JOIN FETCH s.artist WHERE d.user.id = :userId ORDER BY d.dugAt DESC")
+    @Query(value = """
+        SELECT d FROM Dig d JOIN FETCH d.song s JOIN FETCH s.artist
+        WHERE d.user.id = :userId
+        ORDER BY d.recentGrowthRate DESC NULLS LAST
+        """,
+            countQuery = "SELECT COUNT(d) FROM Dig d WHERE d.user.id = :userId")
     Page<Dig> findMyDigsWithSong(@Param("userId") Long userId, Pageable pageable);
+
+
 
     boolean existsByUser_IdAndSong_Id(Long userId, Long songId);
 
@@ -23,4 +30,23 @@ public interface DigRepository extends JpaRepository<Dig, Long> {
 
     @Query("SELECT d FROM Dig d JOIN FETCH d.song s JOIN FETCH s.artist WHERE d.id = :digId")
     Optional<Dig> findByIdWithSong(@Param("digId") Long digId);
+
+    @Query("""
+        SELECT d FROM Dig d
+        JOIN FETCH d.song s
+        JOIN FETCH s.artist
+        WHERE d.user.id = :userId
+        AND LOWER(s.title) LIKE LOWER(CONCAT('%', :keyword, '%'))
+        ORDER BY d.dugAt DESC
+        """)
+    List<Dig> searchMyDigsByTitle(@Param("userId") Long userId, @Param("keyword") String keyword);
+
+    // DigRepository.java 에 추가
+    @Query("""
+        SELECT d FROM Dig d
+        JOIN FETCH d.song s
+        JOIN FETCH s.artist
+        WHERE d.user.id = :userId
+        """)
+    List<Dig> findAllByUserIdWithSong(@Param("userId") Long userId);
 }

@@ -4,6 +4,7 @@ import com.woojin.nerdinary_taem_o.common.dto.ApiResponse;
 import com.woojin.nerdinary_taem_o.domain.dig.dto.DigCreateRequest;
 import com.woojin.nerdinary_taem_o.domain.dig.dto.DigCreateResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -89,4 +90,22 @@ public interface DigControllerDocs {
             )
     })
     ResponseEntity<ApiResponse<DigCreateResponse>> create(DigCreateRequest request);
+
+    @Operation(
+            summary = "성장률 갱신",
+            description = "YouTube API로 현재 조회수를 가져와 해당 DIG의 성장률을 갱신합니다."
+    )
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "200", description = "갱신 성공",
+                    content = @Content(mediaType = "application/json",
+                            examples = @ExampleObject(value = """
+                                    {"success": true, "data": null, "error": null}
+                                    """))),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "DIG를 찾을 수 없음"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "YouTube API 호출 실패")
+    })
+    ResponseEntity<ApiResponse<Void>> refreshGrowthRate(
+            @Parameter(description = "DIG ID", required = true, example = "1") Long digId
+    );
 }

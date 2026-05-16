@@ -5,6 +5,7 @@ import com.woojin.nerdinary_taem_o.common.exception.ErrorCode;
 import com.woojin.nerdinary_taem_o.common.exception.model.BusinessException;
 import com.woojin.nerdinary_taem_o.domain.dig.dto.DigCardDto;
 import com.woojin.nerdinary_taem_o.domain.dig.dto.DigDetailDto;
+import com.woojin.nerdinary_taem_o.domain.dig.dto.DigSearchDto;
 import com.woojin.nerdinary_taem_o.domain.dig.entity.AchievementBadge;
 import com.woojin.nerdinary_taem_o.domain.dig.entity.Dig;
 import com.woojin.nerdinary_taem_o.domain.dig.repository.DigRepository;
@@ -42,6 +43,7 @@ public class DigSearchService {
         return PageResponse.of(digPage, content);
     }
 
+    @Transactional(readOnly = true)
     public DigDetailDto getDigDetail(Long digId) {
         Dig dig = digRepository.findByIdWithSong(digId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.INVALID_INPUT, "존재하지 않는 DIG입니다."));
@@ -64,6 +66,14 @@ public class DigSearchService {
                 growthRate,
                 buildNarrative(snapshot, current, elapsed)
         );
+    }
+
+    @Transactional(readOnly = true)
+    public List<DigSearchDto> searchMyDigs(Long userId, String keyword) {
+        return digRepository.searchMyDigsByTitle(userId, keyword)
+                .stream()
+                .map(DigSearchDto::from)
+                .toList();
     }
 
     private long calculateElapsedMonths(LocalDateTime dugAt) {

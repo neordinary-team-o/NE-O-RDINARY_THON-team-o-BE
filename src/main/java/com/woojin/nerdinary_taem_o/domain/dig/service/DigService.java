@@ -55,7 +55,8 @@ public class DigService {
                 request.uploadDate(),
                 0.0,
                 0,
-                request.comment()
+                request.comment(),
+                request.videoId()
         );
         Dig saved = digRepository.save(dig);
 

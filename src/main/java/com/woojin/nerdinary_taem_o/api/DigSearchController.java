@@ -4,7 +4,9 @@ import com.woojin.nerdinary_taem_o.common.dto.ApiResponse;
 import com.woojin.nerdinary_taem_o.common.dto.PageResponse;
 import com.woojin.nerdinary_taem_o.domain.dig.dto.DigCardDto;
 import com.woojin.nerdinary_taem_o.domain.dig.dto.DigDetailDto;
+import com.woojin.nerdinary_taem_o.domain.dig.dto.DigSearchDto;
 import com.woojin.nerdinary_taem_o.domain.dig.service.DigSearchService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +36,16 @@ public class DigSearchController {
     ) {
         return ResponseEntity.ok(
                 ApiResponse.success(digService.getDigDetail(digId))
+        );
+    }
+
+    @GetMapping("/me/search")
+    public ResponseEntity<ApiResponse<List<DigSearchDto>>> searchMyDigs(
+            @RequestParam Long userId,
+            @RequestParam String keyword
+    ) {
+        return ResponseEntity.ok(
+                ApiResponse.success(digService.searchMyDigs(userId, keyword))
         );
     }
 }
