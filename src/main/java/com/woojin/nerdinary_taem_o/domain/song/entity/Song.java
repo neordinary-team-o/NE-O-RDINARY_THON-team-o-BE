@@ -1,8 +1,6 @@
 package com.woojin.nerdinary_taem_o.domain.song.entity;
 
 import com.woojin.nerdinary_taem_o.common.entity.BaseTimeEntity;
-import com.woojin.nerdinary_taem_o.common.enums.Platform;
-import com.woojin.nerdinary_taem_o.domain.artist.entity.Artist;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -24,10 +22,6 @@ public class Song extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "artist_id", nullable = false)
-    private Artist artist;
-
     @Column(nullable = false)
     private String title;
 
@@ -35,10 +29,6 @@ public class Song extends BaseTimeEntity {
 
     @Column(length = 500)
     private String thumbnailUrl;
-
-    @Enumerated(EnumType.STRING)
-    @Column(length = 10)
-    private Platform platform;
 
     private LocalDate uploadDate;
 }
