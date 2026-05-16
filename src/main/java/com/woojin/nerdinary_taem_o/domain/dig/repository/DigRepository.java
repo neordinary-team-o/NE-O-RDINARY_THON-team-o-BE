@@ -23,4 +23,14 @@ public interface DigRepository extends JpaRepository<Dig, Long> {
 
     @Query("SELECT d FROM Dig d JOIN FETCH d.song s JOIN FETCH s.artist WHERE d.id = :digId")
     Optional<Dig> findByIdWithSong(@Param("digId") Long digId);
+
+    @Query("""
+        SELECT d FROM Dig d
+        JOIN FETCH d.song s
+        JOIN FETCH s.artist
+        WHERE d.user.id = :userId
+        AND LOWER(s.title) LIKE LOWER(CONCAT('%', :keyword, '%'))
+        ORDER BY d.dugAt DESC
+        """)
+    List<Dig> searchMyDigsByTitle(@Param("userId") Long userId, @Param("keyword") String keyword);
 }
