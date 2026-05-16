@@ -1,6 +1,7 @@
 package com.woojin.nerdinary_taem_o.api;
 
 import com.woojin.nerdinary_taem_o.domain.dig.dto.DigCreateResponse;
+import com.woojin.nerdinary_taem_o.domain.dig.service.DigRefreshService;
 import com.woojin.nerdinary_taem_o.domain.dig.service.DigService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,11 +26,14 @@ class DigControllerTests {
     @Mock
     private DigService digService;
 
+    @Mock
+    private DigRefreshService digRefreshService;
+
     private MockMvc mockMvc;
 
     @BeforeEach
     void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(new DigController(digService)).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(new DigController(digService, digRefreshService)).build();
     }
 
     @Test
