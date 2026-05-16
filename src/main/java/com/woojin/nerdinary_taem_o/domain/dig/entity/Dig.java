@@ -1,8 +1,8 @@
 package com.woojin.nerdinary_taem_o.domain.dig.entity;
 
-import com.woojin.nerdinary_taem_o.common.converter.DigSnapshotConverter;
 import com.woojin.nerdinary_taem_o.common.entity.BaseTimeEntity;
-import com.woojin.nerdinary_taem_o.domain.track.entity.Track;
+import com.woojin.nerdinary_taem_o.domain.dig.enums.RarityBadge;
+import com.woojin.nerdinary_taem_o.domain.song.entity.Song;
 import com.woojin.nerdinary_taem_o.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(
     name = "digs",
-    uniqueConstraints = @UniqueConstraint(name = "uq_user_track", columnNames = {"user_id", "track_id"})
+    uniqueConstraints = @UniqueConstraint(name = "uq_user_song", columnNames = {"user_id", "song_id"})
 )
 @Getter
 @Builder
@@ -34,22 +34,28 @@ public class Dig extends BaseTimeEntity {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "track_id", nullable = false)
-    private Track track;
+    @JoinColumn(name = "song_id", nullable = false)
+    private Song song;
 
-    // 서버 타임스탬프 — 클라이언트 값 사용 금지
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
-    private LocalDateTime dugAt;
+    private LocalDateTime digDate;
+
+    @Column(nullable = false)
+    private Long viewsAtDig;
+
+    @Column(nullable = false)
+    private Integer daysSinceUpload;
+
+    private Double growthRateAtDig;
+
+    @Column(nullable = false)
+    private Integer digScore;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
-    private DigSource source;
+    @Column(nullable = false, length = 10)
+    private RarityBadge rarityBadge;
 
     @Column(length = 100)
     private String comment;
-
-    @Convert(converter = DigSnapshotConverter.class)
-    @Column(nullable = false, columnDefinition = "TEXT")
-    private DigSnapshot snapshot;
 }

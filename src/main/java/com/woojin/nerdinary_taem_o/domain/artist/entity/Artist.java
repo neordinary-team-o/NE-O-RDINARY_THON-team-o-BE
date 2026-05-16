@@ -1,6 +1,7 @@
-package com.woojin.nerdinary_taem_o.domain.dig.entity;
+package com.woojin.nerdinary_taem_o.domain.artist.entity;
 
 import com.woojin.nerdinary_taem_o.common.entity.BaseTimeEntity;
+import com.woojin.nerdinary_taem_o.common.enums.Platform;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -8,29 +9,24 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Entity
-@Table(name = "dig_snapshots")
+@Table(name = "artists")
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class DigSnapshot extends BaseTimeEntity {
+public class Artist extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "dig_id", nullable = false)
-    private Dig dig;
-
     @Column(nullable = false)
-    private LocalDateTime snapshotDate;
+    private String name;
 
-    @Column(nullable = false)
-    private Long currentViews;
+    private String externalId;
 
-    private Double growthRate;
+    @Enumerated(EnumType.STRING)
+    @Column(length = 10)
+    private Platform platform;
 }
