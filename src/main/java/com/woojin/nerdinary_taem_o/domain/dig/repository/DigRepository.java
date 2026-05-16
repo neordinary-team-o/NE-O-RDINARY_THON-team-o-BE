@@ -33,4 +33,13 @@ public interface DigRepository extends JpaRepository<Dig, Long> {
         ORDER BY d.dugAt DESC
         """)
     List<Dig> searchMyDigsByTitle(@Param("userId") Long userId, @Param("keyword") String keyword);
+
+    // DigRepository.java 에 추가
+    @Query("""
+        SELECT d FROM Dig d
+        JOIN FETCH d.song s
+        JOIN FETCH s.artist
+        WHERE d.user.id = :userId
+        """)
+    List<Dig> findAllByUserIdWithSong(@Param("userId") Long userId);
 }

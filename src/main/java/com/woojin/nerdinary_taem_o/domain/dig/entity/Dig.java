@@ -34,6 +34,9 @@ public class Dig extends BaseTimeEntity {
     @JoinColumn(name = "song_id", nullable = false)
     private Song song;
 
+    @Column(name = "youtube_video_id", nullable = false)
+    private String videoId;
+
     @Column(nullable = false, updatable = false)
     private LocalDateTime dugAt;    // 발굴 시각, 서버에서만 세팅
 
@@ -62,16 +65,16 @@ public class Dig extends BaseTimeEntity {
 
     public static Dig create(User user, Song song, Long snapshotViewCount,
                              LocalDate snapshotUploadDate, Double recentGrowthRate,
-                             Integer digScore, String comment) {
+                             Integer digScore, String comment, String videoId) {
         return new Dig(user, song, snapshotViewCount, snapshotUploadDate,
-                recentGrowthRate, digScore, comment);
+                recentGrowthRate, digScore, comment, videoId);
     }
 
     private Dig(User user, Song song, Long snapshotViewCount,
                 LocalDate snapshotUploadDate, Double recentGrowthRate,
-                Integer digScore, String comment) {
+                Integer digScore, String comment, String videoId) {
 
-        validate(user, song, snapshotViewCount, digScore, comment);
+        validate(user, song, snapshotViewCount, digScore, comment, videoId);
         this.user = user;
         this.song = song;
         this.snapshotViewCount = snapshotViewCount;
@@ -79,8 +82,15 @@ public class Dig extends BaseTimeEntity {
         this.recentGrowthRate = recentGrowthRate;
         this.digScore = digScore;
         this.comment = comment;
+        this.videoId = videoId;
     }
 
+    public void updateGrowthRate(Double growthRate) {
+        if (growthRate < 0) {
+            throw new BusinessException(ErrorCode.INVALID_INPUT, "성장률은 0 이상이어야 합니다.");
+        }
+        this.recentGrowthRate = growthRate;
+    }
     @PrePersist
     private void prePersist() {
         this.dugAt = LocalDateTime.now();
@@ -92,7 +102,7 @@ public class Dig extends BaseTimeEntity {
     }
 
     private void validate(User user, Song song, Long snapshotViewCount,
-                                 Integer digScore, String comment) {
+                                 Integer digScore, String comment, String videoId) {
         if (user == null) {
             throw new BusinessException(ErrorCode.INVALID_INPUT,
                     "유저 정보는 필수입니다.");
@@ -112,6 +122,10 @@ public class Dig extends BaseTimeEntity {
         if (comment != null && comment.length() > 100) {
             throw new BusinessException(ErrorCode.INVALID_INPUT,
                     "한줄 평가는 100자 이하여야 합니다.");
+        }
+        if (videoId == null) {
+            throw new BusinessException(ErrorCode.INVALID_INPUT,
+                    "유튜브 영상의 고유 id는 필수입니다.");
         }
     }
 }
