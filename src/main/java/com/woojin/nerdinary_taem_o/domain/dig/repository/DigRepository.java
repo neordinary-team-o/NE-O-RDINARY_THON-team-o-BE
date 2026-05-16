@@ -1,9 +1,22 @@
 package com.woojin.nerdinary_taem_o.domain.dig.repository;
 
 import com.woojin.nerdinary_taem_o.domain.dig.entity.Dig;
+import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface DigRepository extends JpaRepository<Dig, Long> {
 
     boolean existsByUserIdAndSongId(Long userId, Long songId);
+
+    @Query("SELECT d FROM Dig d JOIN FETCH d.song s JOIN FETCH s.artist WHERE d.user.id = :userId ORDER BY d.dugAt DESC")
+    Page<Dig> findMyDigsWithSong(@Param("userId") Long userId, Pageable pageable);
+
+    boolean existsByUser_IdAndSong_Id(Long userId, Long songId);
+
+    @Query("SELECT d FROM Dig d JOIN FETCH d.song s JOIN FETCH s.artist WHERE d.achievementBadge IS NULL")
+    List<Dig> findAllPendingAchievement();
 }
