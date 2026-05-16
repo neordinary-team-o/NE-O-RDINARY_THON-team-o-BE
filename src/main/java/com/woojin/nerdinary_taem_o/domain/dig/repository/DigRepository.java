@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface DigRepository extends JpaRepository<Long, Dig> {
+public interface DigRepository extends JpaRepository<Dig, Long> {
 
     @Query("SELECT d FROM Dig d JOIN FETCH d.song s JOIN FETCH s.artist WHERE d.user.id = :userId ORDER BY d.dugAt DESC")
     Page<Dig> findMyDigsWithSong(@Param("userId") Long userId, Pageable pageable);
