@@ -8,5 +8,5 @@ import java.util.Optional;
 
 public interface TrackStatsRepository extends JpaRepository<TrackStats, Long> {
 
-    Optional<TrackStats> findTopByTrackOrderByCheckedAtDesc(Track track);
+    Optional<TrackStats> findTopByTrackOrderByCreatedAtDesc(Track track);
 }

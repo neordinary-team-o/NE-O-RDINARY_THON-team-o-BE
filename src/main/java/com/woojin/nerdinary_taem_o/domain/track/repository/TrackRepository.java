@@ -7,7 +7,5 @@ import java.util.Optional;
 
 public interface TrackRepository extends JpaRepository<Track, Long> {
 
-    Optional<Track> findBySpotifyId(String spotifyId);
-
     Optional<Track> findByYoutubeId(String youtubeId);
 }

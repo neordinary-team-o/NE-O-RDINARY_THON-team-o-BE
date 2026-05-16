@@ -20,9 +20,6 @@ public class Track extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, length = 100)
-    private String spotifyId;
-
     @Column(length = 100)
     private String youtubeId;
 
