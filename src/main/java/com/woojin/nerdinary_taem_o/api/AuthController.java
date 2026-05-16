@@ -7,6 +7,7 @@ import com.woojin.nerdinary_taem_o.domain.user.dto.LoginResponse;
 import com.woojin.nerdinary_taem_o.domain.user.dto.SignupRequest;
 import com.woojin.nerdinary_taem_o.domain.user.dto.SignupResponse;
 import com.woojin.nerdinary_taem_o.domain.user.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,14 +25,14 @@ public class AuthController implements AuthControllerDocs {
 
     @Override
     @PostMapping("/signup")
-    public ResponseEntity<ApiResponse<SignupResponse>> signup(@RequestBody SignupRequest request) {
+    public ResponseEntity<ApiResponse<SignupResponse>> signup(@Valid @RequestBody SignupRequest request) {
         SignupResponse response = userService.signup(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(response));
     }
 
     @Override
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<LoginResponse>> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<ApiResponse<LoginResponse>> login(@Valid @RequestBody LoginRequest request) {
         LoginResponse response = userService.login(request);
         return ResponseEntity.ok(ApiResponse.success(response));
     }

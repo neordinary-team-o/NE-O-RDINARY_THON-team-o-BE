@@ -6,6 +6,7 @@ import com.woojin.nerdinary_taem_o.domain.dig.dto.DigCreateRequest;
 import com.woojin.nerdinary_taem_o.domain.dig.dto.DigCreateResponse;
 import com.woojin.nerdinary_taem_o.domain.dig.service.DigRefreshService;
 import com.woojin.nerdinary_taem_o.domain.dig.service.DigService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ public class DigController implements DigControllerDocs {
 
     @Override
     @PostMapping
-    public ResponseEntity<ApiResponse<DigCreateResponse>> create(@RequestBody DigCreateRequest request) {
+    public ResponseEntity<ApiResponse<DigCreateResponse>> create(@Valid @RequestBody DigCreateRequest request) {
         DigCreateResponse response = digService.create(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(response));
     }

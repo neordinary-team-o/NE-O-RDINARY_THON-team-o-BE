@@ -31,12 +31,13 @@ public class User extends BaseTimeEntity {
     }
 
     private User(String nickname, String password) {
+        validate(nickname, password);
         this.nickname = nickname;
         this.password = password;
     }
 
     private void validate(String nickname, String password) {
-        if (nickname.isEmpty() || password.isEmpty()) {
+        if (nickname == null || nickname.isBlank() || password == null || password.isBlank()) {
             throw new BusinessException(ErrorCode.LOGIN_INVALID_INPUT,
                     ErrorCode.LOGIN_INVALID_INPUT.getMessage());
         }

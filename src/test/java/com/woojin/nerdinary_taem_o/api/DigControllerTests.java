@@ -3,6 +3,8 @@ package com.woojin.nerdinary_taem_o.api;
 import com.woojin.nerdinary_taem_o.domain.dig.dto.DigCreateResponse;
 import com.woojin.nerdinary_taem_o.domain.dig.service.DigRefreshService;
 import com.woojin.nerdinary_taem_o.domain.dig.service.DigService;
+import com.woojin.nerdinary_taem_o.common.exception.ErrorCode;
+import com.woojin.nerdinary_taem_o.common.exception.model.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,7 +17,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.time.LocalDateTime;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -33,7 +37,7 @@ class DigControllerTests {
 
     @BeforeEach
     void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(new DigController(digService, digRefreshService)).build();
+        mockMvc = MockMvcTestSupport.mockMvc(new DigController(digService, digRefreshService));
     }
 
     @Test
@@ -76,5 +80,53 @@ class DigControllerTests {
                 .andExpect(jsonPath("$.data.growthRate").value(0.0))
                 .andExpect(jsonPath("$.data.achievementBadge").doesNotExist())
                 .andExpect(jsonPath("$.error").doesNotExist());
+    }
+
+    @Test
+    void createRejectsMissingRequiredFields() throws Exception {
+        mockMvc.perform(post("/api/digs")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "title": "",
+                                  "artist": "",
+                                  "viewCount": -1,
+                                  "comment": "12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901"
+                                }
+                                """))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.success").value(false))
+                .andExpect(jsonPath("$.data").doesNotExist())
+                .andExpect(jsonPath("$.error.code").value("INVALID_INPUT"));
+    }
+
+    @Test
+    void createRejectsInvalidUploadDateFormat() throws Exception {
+        mockMvc.perform(post("/api/digs")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "userId": 1,
+                                  "videoId": "Amq-qlqbjYA",
+                                  "title": "마지막처럼",
+                                  "artist": "BLACKPINK",
+                                  "viewCount": 123456789,
+                                  "uploadDate": "2017/06/22"
+                                }
+                                """))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.success").value(false))
+                .andExpect(jsonPath("$.error.code").value("INVALID_INPUT"));
+    }
+
+    @Test
+    void refreshGrowthRateReturnsNotFoundWhenDigDoesNotExist() throws Exception {
+        doThrow(new EntityNotFoundException(ErrorCode.DIG_NOT_FOUND))
+                .when(digRefreshService).refreshGrowthRate(99L);
+
+        mockMvc.perform(patch("/api/digs/{digId}/growth-rate", 99L))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.success").value(false))
+                .andExpect(jsonPath("$.error.code").value("DIG_NOT_FOUND"));
     }
 }

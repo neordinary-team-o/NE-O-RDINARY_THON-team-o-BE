@@ -1,23 +1,33 @@
 package com.woojin.nerdinary_taem_o.domain.dig.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 
 @Schema(description = "곡 발굴 등록 요청")
 public record DigCreateRequest(
         @Schema(description = "사용자 ID", example = "1", requiredMode = Schema.RequiredMode.REQUIRED)
+        @NotNull(message = "사용자 ID는 필수입니다.")
         Long userId,
 
         @Schema(description = "유튜브 영상 ID. 현재 DB에는 저장하지 않습니다.", example = "Amq-qlqbjYA")
+        @NotBlank(message = "유튜브 영상의 고유 id는 필수입니다.")
         String videoId,
 
         @Schema(description = "곡 제목", example = "마지막처럼", requiredMode = Schema.RequiredMode.REQUIRED)
+        @NotBlank(message = "곡 제목은 필수입니다.")
         String title,
 
         @Schema(description = "아티스트명", example = "BLACKPINK", requiredMode = Schema.RequiredMode.REQUIRED)
+        @NotBlank(message = "아티스트 이름은 필수입니다.")
         String artist,
 
         @Schema(description = "발굴 당시 조회수", example = "123456789", requiredMode = Schema.RequiredMode.REQUIRED)
+        @NotNull(message = "조회수는 필수입니다.")
+        @Min(value = 0, message = "조회수는 0 이상이어야 합니다.")
         Long viewCount,
 
         @Schema(description = "유튜브 업로드 날짜", example = "2017-06-22")
@@ -27,6 +37,7 @@ public record DigCreateRequest(
         String thumbnailUrl,
 
         @Schema(description = "한 줄 평가. 최대 100자입니다.", example = "초기에 발견한 곡")
+        @Size(max = 100, message = "한줄 평가는 100자 이하여야 합니다.")
         String comment
 ) {
 }

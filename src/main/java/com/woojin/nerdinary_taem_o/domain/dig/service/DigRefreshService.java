@@ -2,6 +2,7 @@ package com.woojin.nerdinary_taem_o.domain.dig.service;
 
 import com.woojin.nerdinary_taem_o.common.exception.ErrorCode;
 import com.woojin.nerdinary_taem_o.common.exception.model.BusinessException;
+import com.woojin.nerdinary_taem_o.common.exception.model.EntityNotFoundException;
 import com.woojin.nerdinary_taem_o.domain.dig.entity.Dig;
 import com.woojin.nerdinary_taem_o.domain.dig.repository.DigRepository;
 import com.woojin.nerdinary_taem_o.domain.song.client.YoutubeClient;
@@ -22,7 +23,7 @@ public class DigRefreshService {
     @Transactional
     public void refreshGrowthRate(Long digId) {
         Dig dig = digRepository.findByIdWithSong(digId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.INVALID_INPUT, "존재하지 않는 DIG입니다."));
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.DIG_NOT_FOUND));
 
         Long currentViewCount = fetchCurrentViewCount(dig.getVideoId());
         updateSongViewCount(dig.getSong(), currentViewCount);

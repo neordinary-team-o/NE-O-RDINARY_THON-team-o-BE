@@ -8,9 +8,10 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum ErrorCode {
 
-    // 공통 (400)
+    // 공통 (400, 409)
     INVALID_INPUT(HttpStatus.BAD_REQUEST, "입력값이 올바르지 않습니다"),
     LOGIN_INVALID_INPUT(HttpStatus.BAD_REQUEST, "ID또는 비밀번호가 입력되지 않았습니다"),
+    DUPLICATE_RESOURCE(HttpStatus.CONFLICT, "이미 존재하는 리소스입니다"),
 
     // 공통 (500)
     INTERNAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 오류가 발생했습니다"),
@@ -21,6 +22,7 @@ public enum ErrorCode {
 
     // 곡/발굴
     SONG_SEARCH_EMPTY(HttpStatus.NOT_FOUND, "검색된 곡이 없습니다"),
+    DIG_NOT_FOUND(HttpStatus.NOT_FOUND, "DIG를 찾을 수 없습니다"),
     DUPLICATE_DIG(HttpStatus.CONFLICT, "이미 등록한 곡입니다"),
     EXTERNAL_API_FAILED(HttpStatus.BAD_GATEWAY, "외부 API 호출에 실패했습니다"),
 

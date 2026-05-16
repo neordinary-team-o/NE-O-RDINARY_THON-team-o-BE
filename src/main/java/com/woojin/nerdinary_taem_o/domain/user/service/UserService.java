@@ -21,6 +21,9 @@ public class UserService {
 
     @Transactional
     public SignupResponse signup(SignupRequest request) {
+        if (request == null) {
+            throw new BusinessException(ErrorCode.INVALID_INPUT, "요청 값은 필수입니다.");
+        }
         if (userRepository.existsByNickname(request.nickname())) {
             throw new DuplicateResourceException(ErrorCode.DUPLICATE_NICKNAME);
         }
@@ -33,6 +36,9 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public LoginResponse login(LoginRequest request) {
+        if (request == null) {
+            throw new BusinessException(ErrorCode.INVALID_INPUT, "요청 값은 필수입니다.");
+        }
         User user = userRepository.findByNickname(request.nickname())
                 .filter(u -> u.getPassword().equals(request.password()))
                 .orElseThrow(() -> new BusinessException(ErrorCode.LOGIN_FAILED));

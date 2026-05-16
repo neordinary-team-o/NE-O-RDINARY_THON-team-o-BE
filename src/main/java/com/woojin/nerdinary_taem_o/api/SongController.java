@@ -5,6 +5,7 @@ import com.woojin.nerdinary_taem_o.common.dto.ApiResponse;
 import com.woojin.nerdinary_taem_o.domain.song.dto.SongSearchRequest;
 import com.woojin.nerdinary_taem_o.domain.song.dto.SongSearchResponse;
 import com.woojin.nerdinary_taem_o.domain.song.service.SongSearchService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +22,7 @@ public class SongController implements SongControllerDocs {
 
     @Override
     @PostMapping("/search")
-    public ResponseEntity<ApiResponse<SongSearchResponse>> search(@RequestBody SongSearchRequest request) {
+    public ResponseEntity<ApiResponse<SongSearchResponse>> search(@Valid @RequestBody SongSearchRequest request) {
         SongSearchResponse response = songSearchService.search(request);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
