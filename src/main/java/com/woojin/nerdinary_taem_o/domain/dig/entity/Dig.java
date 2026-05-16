@@ -1,6 +1,8 @@
 package com.woojin.nerdinary_taem_o.domain.dig.entity;
 
 import com.woojin.nerdinary_taem_o.common.entity.BaseTimeEntity;
+import com.woojin.nerdinary_taem_o.common.exception.ErrorCode;
+import com.woojin.nerdinary_taem_o.common.exception.model.BusinessException;
 import com.woojin.nerdinary_taem_o.domain.song.entity.Song;
 import com.woojin.nerdinary_taem_o.domain.user.entity.User;
 import jakarta.persistence.*;
@@ -58,15 +60,58 @@ public class Dig extends BaseTimeEntity {
     @Column
     private LocalDateTime achievedAt;           // nullable
 
-    // ─────────────────────────────────────────────────
-    @PrePersist
-    private void prePersist() {
-        this.dugAt = LocalDateTime.now();   // 서버 타임스탬프 강제
+    public static Dig create(User user, Song song, Long snapshotViewCount,
+                             LocalDate snapshotUploadDate, Double recentGrowthRate,
+                             Integer digScore, String comment) {
+        return new Dig(user, song, snapshotViewCount, snapshotUploadDate,
+                recentGrowthRate, digScore, comment);
     }
 
-    // 업적 달성 시 스케줄러에서 호출
+    private Dig(User user, Song song, Long snapshotViewCount,
+                LocalDate snapshotUploadDate, Double recentGrowthRate,
+                Integer digScore, String comment) {
+
+        validate(user, song, snapshotViewCount, digScore, comment);
+        this.user = user;
+        this.song = song;
+        this.snapshotViewCount = snapshotViewCount;
+        this.snapshotUploadDate = snapshotUploadDate;
+        this.recentGrowthRate = recentGrowthRate;
+        this.digScore = digScore;
+        this.comment = comment;
+    }
+
+    @PrePersist
+    private void prePersist() {
+        this.dugAt = LocalDateTime.now();
+    }
+
     public void achieve() {
         this.achievementBadge = AchievementBadge.TRENDSETTER;
         this.achievedAt = LocalDateTime.now();
+    }
+
+    private void validate(User user, Song song, Long snapshotViewCount,
+                                 Integer digScore, String comment) {
+        if (user == null) {
+            throw new BusinessException(ErrorCode.INVALID_INPUT,
+                    "유저 정보는 필수입니다.");
+        }
+        if (song == null) {
+            throw new BusinessException(ErrorCode.INVALID_INPUT,
+                    "곡 정보는 필수입니다.");
+        }
+        if (snapshotViewCount == null || snapshotViewCount < 0) {
+            throw new BusinessException(ErrorCode.INVALID_INPUT,
+                    "발굴 당시 조회수는 0 이상이어야 합니다.");
+        }
+        if (digScore == null || digScore < 0 || digScore > 100) {
+            throw new BusinessException(ErrorCode.INVALID_INPUT,
+                    "DIG SCORE는 0~100 사이여야 합니다.");
+        }
+        if (comment != null && comment.length() > 100) {
+            throw new BusinessException(ErrorCode.INVALID_INPUT,
+                    "한줄 평가는 100자 이하여야 합니다.");
+        }
     }
 }
