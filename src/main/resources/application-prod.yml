@@ -18,7 +18,20 @@ spring:
         format_sql: false
         use_sql_comments: true
 
+server:
+  forward-headers-strategy: framework
+
+openapi:
+  server-url: ${OPENAPI_SERVER_URL:https://api.neordinary-o.r-e.kr}
+
 jwt:
   secret: ${JWT_SECRET}
   access-token-validity-in-milliseconds: ${ACCESS_TOKEN_VALIDITY_IN_MILLISECONDS}
   refresh-token-validity-in-milliseconds: ${REFRESH_TOKEN_VALIDITY_IN_MILLISECONDS}
+
+youtube:
+  api-key: ${YOUTUBE_API_KEY}
+
+gemini:
+  api-key: ${GEMINI_API_KEY}
+  model: ${GEMINI_MODEL:gemini-2.5-flash-lite}
