@@ -50,11 +50,11 @@ YouTube API를 통해 음악을 검색하고, Gemini API를 활용해 음악 메
 
 ### ERD
 
-
+<img width="2474" height="1534" alt="Nerdinary_taem_o_BE_ERD" src="https://github.com/user-attachments/assets/c9e755a9-9eba-4f21-9439-1405128f8109" />
 
 ### System Architecture
 
-
+<img width="1892" height="1004" alt="Nerdinary_taem_o_BE_DeployDiagram" src="https://github.com/user-attachments/assets/907485e3-f47c-402b-a77f-2c9a0b97af64" />
 
 ## Project Structure
 
