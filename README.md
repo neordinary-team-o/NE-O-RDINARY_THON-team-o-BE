@@ -1,6 +1,10 @@
-# Nerdinary Team O Backend
+# 홍대병동 Backend
 
-음악을 검색하고, 나만의 DIG를 기록하고 공유하는 서비스의 백엔드 API 서버입니다.
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/34bba425-7a8e-4de5-8e37-ab0f97104cc4" />
+
+---
+
+비주류 음악을 발굴하고, 나만의 DIG를 기록하고 공유하는 서비스의 백엔드 API 서버입니다.
 
 ![Java](https://img.shields.io/badge/Java-17-007396?style=flat-square&logo=openjdk&logoColor=white)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.0.6-6DB33F?style=flat-square&logo=springboot&logoColor=white)
@@ -19,7 +23,7 @@
 
 ## Overview
 
-Nerdinary Team O Backend는 사용자 인증, 음악 검색, DIG 생성 및 조회 기능을 제공하는 Spring Boot 기반 API 서버입니다.  
+홍대병동 백엔드 서버는 사용자 인증, 음악 검색, DIG 생성 및 조회 기능을 제공하는 Spring Boot 기반 API 서버입니다.  
 YouTube API를 통해 음악을 검색하고, Gemini API를 활용해 음악 메타데이터를 처리합니다.
 
 ## Features
@@ -103,19 +107,6 @@ macOS / Linux:
 ./gradlew bootRun
 ```
 
-## Test
-
-Windows PowerShell:
-
-```bash
-.\gradlew.bat test
-```
-
-macOS / Linux:
-
-```bash
-./gradlew test
-```
 
 ## API Docs
 
